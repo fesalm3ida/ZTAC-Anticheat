@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Console · Anti-cheat{% endblock %}
+{% block body %}
+<div class="min-h-screen">
+  <!-- Topbar -->
+  <header class="sticky top-0 z-20 border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-3 h-3 rounded-full bg-accent animate-pulse"></span>
+        <span class="text-xl font-bold tracking-tight">ANTI-CHEAT</span>
+        <span class="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-400">
+          <span class="px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">CS 1.6</span>
+          <span id="mode-badge" class="px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">…</span>
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="user-name" class="text-sm text-slate-300"></span>
+        <button id="logout" class="text-sm text-slate-400 hover:text-slate-100 transition">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Coluna esquerda: controles + veredito -->
+      <div class="lg:col-span-1 space-y-6">
+        <!-- Controles -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-4">Varredura</h2>
+
+          <label class="block text-sm text-slate-300 mb-1" for="process">Processo alvo</label>
+          <div class="flex gap-2">
+            <select id="process" class="w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2.5 text-sm">
+              <option value="">Auto-detectar (nenhum)</option>
+            </select>
+            <button id="clear-process" type="button" title="Limpar o processo selecionado"
+                    class="shrink-0 rounded-lg border border-slate-700 hover:bg-slate-800 transition text-slate-300 px-3 text-sm">
+              ✕ Limpar
+            </button>
+          </div>
+
+          <button id="scan-btn"
+                  class="mt-4 w-full rounded-lg bg-accent hover:bg-rose-500 transition text-white font-semibold py-3 text-sm disabled:opacity-40 disabled:cursor-not-allowed">
+            Iniciar varredura
+          </button>
+
+          <button id="clean-btn"
+                  class="mt-2 w-full rounded-lg border border-slate-700 hover:bg-slate-800 transition text-slate-300 font-medium py-2 text-sm">
+            Simular processo limpo (demo)
+          </button>
+
+          <label id="no-proc-wrap" for="no-process"
+                 class="hidden mt-3 flex items-center gap-2 text-sm text-slate-400">
+            <input id="no-process" type="checkbox"
+                   class="w-4 h-4 rounded border-slate-700 bg-slate-800">
+            Simular processo não encontrado (demo)
+          </label>
+
+          <p id="scan-status" class="mt-4 text-sm text-slate-400 min-h-[1.25rem]"></p>
+        </section>
+
+        <!-- Veredito -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide mb-4">Veredito</h2>
+          <div id="verdict-empty" class="text-sm text-slate-400">Nenhuma varredura ainda.</div>
+          <div id="verdict" class="hidden">
+            <div id="verdict-banner" class="rounded-xl px-5 py-4 border"></div>
+            <div class="mt-5">
+              <div class="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Nível de ameaça</span><span id="score-num">0</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden">
+                <div id="score-bar" class="h-full rounded-full transition-all duration-500"></div>
+              </div>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-3 text-center">
+              <div class="bg-slate-800 rounded-lg py-3">
+                <div id="stat-findings" class="text-2xl font-bold">0</div>
+                <div class="text-xs text-slate-400">Achados</div>
+              </div>
+              <div class="bg-slate-800 rounded-lg py-3">
+                <div id="stat-modules" class="text-2xl font-bold">0</div>
+                <div class="text-xs text-slate-400">Módulos</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Coluna direita: resultados + histórico -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Resultados -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl">
+          <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Resultados por estágio</h2>
+            <span id="report-time" class="text-xs text-slate-500"></span>
+          </div>
+          <div id="results" class="p-6">
+            <p class="text-sm text-slate-400">Inicie uma varredura para ver os achados.</p>
+          </div>
+        </section>
+
+        <!-- Histórico -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl">
+          <div class="px-6 py-4 border-b border-slate-800">
+            <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Histórico</h2>
+          </div>
+          <div id="history" class="p-6 text-sm text-slate-400">Sem registros.</div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/static/app.js"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+# bytecode
+__pycache__/
+*.pyc
+
+# dados de runtime (SQLite, sessões, secret) — gerados no boot
+data/*.db
+data/secret.key
+data/sessions/
+
+# virtualenvs
+.venv/
+venv/
+video_venv/
+
+# pacote de wheels (instalação offline)
+wheelhouse/
+
+# binários / artefatos de build
+*.exe
+*.dll
+*.obj
+*.pdb
+
+# editores / SO
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

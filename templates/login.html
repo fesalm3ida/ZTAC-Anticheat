@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Login · Anti-cheat{% endblock %}
+{% block body %}
+<div class="min-h-screen flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 text-2xl font-bold tracking-tight">
+        <span class="w-3 h-3 rounded-full bg-accent animate-pulse"></span>
+        ANTI-CHEAT
+      </div>
+      <p class="text-slate-400 mt-1 text-sm">Console de detecção · laboratório Zero-Trust-Syndicate</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl">
+      <h1 class="text-lg font-semibold mb-6">Entrar</h1>
+
+      <div id="error" class="hidden mb-4 text-sm text-rose-300 bg-rose-950/50 border border-rose-900 rounded-lg px-4 py-2"></div>
+
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="block text-sm text-slate-300 mb-1" for="username">Usuário</label>
+          <input id="username" name="username" type="text" required autocomplete="username"
+                 class="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-sm text-slate-300 mb-1" for="password">Senha</label>
+          <input id="password" name="password" type="password" required autocomplete="current-password"
+                 class="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <button type="submit"
+                class="w-full rounded-lg bg-brand-600 hover:bg-brand-500 transition text-white font-semibold py-2.5 text-sm">
+          Entrar
+        </button>
+      </form>
+
+      <p class="text-sm text-slate-400 mt-6 text-center">
+        Não tem conta?
+        <a href="/register" class="text-brand-500 hover:underline">Criar conta</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="/static/auth.js"></script>
+{% endblock %}
