@@ -15,6 +15,9 @@ video_venv/
 # pacote de wheels (instalação offline)
 wheelhouse/
 
+# mídia / assets de vídeo (projeto audiovisual) — fora do repo
+video_assets/
+
 # binários / artefatos de build
 *.exe
 *.dll

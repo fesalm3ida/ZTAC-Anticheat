@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitetura do anti-cheat</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; background: #0f172a; color: #e2e8f0;
+           font-family: ui-sans-serif, system-ui, sans-serif; }
+    header { padding: 1.2rem 1.6rem; border-bottom: 1px solid #1e293b; }
+    header h1 { margin: 0; font-size: 1.25rem; }
+    header p { margin: .35rem 0 0; color: #64748b; font-size: .85rem; }
+    main { padding: 1.6rem; max-width: 1100px; margin: 0 auto; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+            padding: 1rem; }
+    a { color: #818cf8; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Arquitetura do anti-cheat (Flask + Tailwind)</h1>
+    <p>Diagrama gerado com Mermaid. Use a barra lateral para exportar PNG/SVG.</p>
+  </header>
+  <main>
+    <div class="card">
+      <pre class="mermaid">
+flowchart TD
+    U[/"Usuário<br/>Navegador · Tailwind CDN<br/>login · registro · dashboard"/]
+    U -->|"HTTP — páginas + JSON"| WEB
+
+    subgraph FLASK["Servlet Flask (anticheat/)"]
+        WEB["web.py · fábrica do app<br/>rotas de página /login /register /"]
+        API["api.py · Blueprint REST<br/>/api/*"]
+        AUTH["auth.py · sessão assinada<br/>hash werkzeug"]
+        DB[("db.py · SQLite<br/>usuários + histórico scans")]
+        FACT["scanner/__init__.py<br/>create_scanner()"]
+    end
+
+    WEB --> API
+    API --> AUTH
+    API --> DB
+    API --> FACT
+
+    FACT -->|"os.name == 'nt'"| WS
+    FACT -->|"WSL/Linux ou AC_FORCE_DEMO=1"| SS
+
+    subgraph BACKEND["Backend de varredura"]
+        WS["WindowsScanner · real<br/>ctypes → kernel32/ntdll<br/>scanner/windows_scanner.py"]
+        SS["SimulatedScanner · demo<br/>dados sintéticos p/ UI<br/>scanner/simulated_scanner.py"]
+        PE["pe_parser.py · parser de PE<br/>exports + RVA→offset"]
+        SIG["signatures.py · assinaturas v8"]
+    end
+
+    subgraph DETECCAO["Estágios de detecção"]
+        SA["Estágio A — Módulos injetados"]
+        SB["Estágio B — Detours / integridade"]
+        SC["Estágio C — Artefatos & strings"]
+    end
+
+    WS --> SA & SB & SC
+    SB --> PE
+    WS & SS --> SIG
+    WS -->|"ReadProcessMemory / VirtualQueryEx"| GAME
+    GAME[("Processo do jogo · Windows<br/>hl.exe / cstrike.exe<br/>memória, módulos, opengl32.dll")]
+
+    SA --> RS[("ScanReport<br/>veredito · score · findings<br/>base.py")]
+    SB --> RS
+    SC --> RS
+    SS --> RS
+    RS --> DB
+      </pre>
+    </div>
+  </main>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "dark" });
+  </script>
+</body>
+</html>
