@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagrama de componentes — Anti-cheat</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: #0b1220; color: #e2e8f0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    header {
+      padding: 1.1rem 1.5rem; border-bottom: 1px solid #1e293b;
+      background: #0f172a; position: sticky; top: 0; z-index: 10;
+    }
+    header h1 { margin: 0; font-size: 1.15rem; letter-spacing: .01em; }
+    header p { margin: .3rem 0 0; color: #64748b; font-size: .82rem; }
+    main { padding: 1.5rem; max-width: 1180px; margin: 0 auto; }
+    .card {
+      background: #0f172a; border: 1px solid #1e293b; border-radius: 14px;
+      padding: 1.2rem; overflow: auto;
+    }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;
+      font-size: .8rem; color: #94a3b8;
+    }
+    .legend span { display: inline-flex; align-items: center; gap: .4rem; }
+    .dot { width: .7rem; height: .7rem; border-radius: 50%; display: inline-block; }
+    .mermaid { display: flex; justify-content: center; }
+    .mermaid svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Diagrama de componentes — Anti-cheat web (CS 1.6)</h1>
+    <p>Arquitetura em três camadas: apresentação, aplicação e detecção.</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <pre class="mermaid">
+flowchart TB
+    classDef ui    fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#e2e8f0
+    classDef core  fill:#1e293b,stroke:#22d3ee,stroke-width:2px,color:#e2e8f0
+    classDef scan  fill:#1e293b,stroke:#fb7185,stroke-width:2px,color:#e2e8f0
+    classDef stage fill:#0b1220,stroke:#fbbf24,stroke-width:1.5px,color:#fde68a
+    classDef ext   fill:#111827,stroke:#94a3b8,stroke-width:1.5px,color:#cbd5e1,stroke-dasharray:5 4
+
+    USR(["Usuário"]):::ui
+
+    subgraph L1["1 · APRESENTAÇÃO — browser"]
+        direction LR
+        UI["templates/&lt;br/&gt;login · register · dashboard · base"]:::ui
+        JS["static/&lt;br/&gt;app.js · auth.js"]:::ui
+        UI --> JS
+    end
+
+    subgraph L2["2 · APLICAÇÃO — Flask"]
+        direction LR
+        WEB["web.py&lt;br/&gt;rotas de página"]:::core
+        API["api.py&lt;br/&gt;REST /api/*"]:::core
+        AUTH["auth.py&lt;br/&gt;sessão + hash"]:::core
+        DB[("db.py&lt;br/&gt;SQLite")]:::core
+        CFG["config.py"]:::core
+        WEB --> API
+        API --> AUTH
+        API --> DB
+        CFG -.-> API
+    end
+
+    subgraph L3["3 · DETECÇÃO — scanner"]
+        direction LR
+        BASE["base.py&lt;br/&gt;interface + ScanReport"]:::scan
+        SIG["signatures.py"]:::scan
+        PE["pe_parser.py&lt;br/&gt;PE32 / PE64"]:::scan
+        WS["windows_scanner.py&lt;br/&gt;ctypes → kernel32"]:::scan
+        SS["simulated_scanner.py&lt;br/&gt;demo"]:::scan
+        BASE --> SIG
+        BASE -.->|"Windows"| WS
+        BASE -.->|"WSL / Linux"| SS
+        WS --> PE
+        subgraph EST["estágios de detecção"]
+            direction LR
+            A1["A · Módulos"]:::stage
+            B1["B · Detours"]:::stage
+            C1["C · Artefatos"]:::stage
+        end
+        WS --> EST
+    end
+
+    USR ==> UI
+    UI ==>|"HTTP · JSON"| WEB
+    JS ==>|"Fetch API"| API
+    API ==>|"create_scanner()"| BASE
+    WS ==>|"ReadProcessMemory · VirtualQueryEx"| GAME[("Processo do jogo&lt;br/&gt;hl.exe / cstrike.exe")]:::ext
+    SS ==> DEMO[("Dados sintéticos")]:::ext
+    EST ==>|"ScanReport"| DB
+
+    style L1 fill:#0f172a,stroke:#818cf8,stroke-width:1.5px,color:#c7d2fe
+    style L2 fill:#0f172a,stroke:#22d3ee,stroke-width:1.5px,color:#a5f3fc
+    style L3 fill:#0f172a,stroke:#fb7185,stroke-width:1.5px,color:#fecdd3
+    style EST fill:#111827,stroke:#fbbf24,stroke-width:1.5px,color:#fde68a
+      </pre>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#818cf8"></i> Apresentação (frontend)</span>
+      <span><i class="dot" style="background:#22d3ee"></i> Aplicação (Flask)</span>
+      <span><i class="dot" style="background:#fb7185"></i> Detecção (scanner)</span>
+      <span><i class="dot" style="background:#fbbf24"></i> Estágios A · B · C</span>
+      <span><i class="dot" style="background:#94a3b8"></i> Alvo externo / demo</span>
+    </div>
+  </main>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "dark", securityLevel: "loose" });
+  </script>
+</body>
+</html>

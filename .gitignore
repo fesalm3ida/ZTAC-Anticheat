@@ -15,8 +15,16 @@ video_venv/
 # pacote de wheels (instalação offline)
 wheelhouse/
 
-# mídia / assets de vídeo (projeto audiovisual) — fora do repo
+# projeto audiovisual (VISAGRU) — NÃO faz parte deste repositório
 video_assets/
+video_venv/
+build_assets.py
+cutout.py
+cutout2.py
+cutout_30.py
+make_icon.py
+render.py
+se_ops.py
 
 # binários / artefatos de build
 *.exe
@@ -29,3 +37,6 @@ video_assets/
 .idea/
 Thumbs.db
 Desktop.ini
+
+# temporários do Word / LibreOffice
+~$*

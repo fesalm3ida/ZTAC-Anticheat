@@ -46,6 +46,8 @@ REFERENCIAS = [
     "MERMAID. **Mermaid: diagramming and charting tool**. 2024. Disponível em: https://mermaid.js.org/. Acesso em: 1 set. 2026.",
     "PYTHON SOFTWARE FOUNDATION. **sqlite3: SQLite databases**. Python 3.10.1 documentation. 2024. Disponível em: https://docs.python.org/3/library/sqlite3.html. Acesso em: 1 set. 2026.",
     "H J CHEATS. **Cheat para Counter-Strike** [software analisado]. 2025. Disponível em: https://dhjcheats.com/. Acesso em: 1 set. 2026.",
+    "ALSCH092. **UltimateAntiCheat**: open source usermode anti-cheat system (C++, Windows). GitHub, [2023]. Disponível em: https://github.com/AlSch092/UltimateAntiCheat. Acesso em: 17 out. 2026.",
+    "VALVE CORPORATION. **Valve Anti-Cheat (VAC)**: sistema anti-cheat e banimentos de jogo. [S.l.]: Valve Corporation, 2003. Disponível em: https://partner.steamgames.com/doc/features/anticheat. Acesso em: 17 out. 2026.",
 ]
 
 

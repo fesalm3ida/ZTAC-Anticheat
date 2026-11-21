@@ -1,0 +1,60 @@
+flowchart TB
+    classDef ui    fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#1e293b
+    classDef core  fill:#ecfeff,stroke:#0891b2,stroke-width:2px,color:#1e293b
+    classDef scan  fill:#fff1f2,stroke:#e11d48,stroke-width:2px,color:#1e293b
+    classDef stage fill:#fffbeb,stroke:#d97706,stroke-width:1.5px,color:#78350f
+    classDef ext   fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#334155,stroke-dasharray:5 4
+
+    USR(["Usuário"]):::ui
+
+    subgraph L1["1 · APRESENTAÇÃO — browser"]
+        direction LR
+        UI["templates / login · register · dashboard · base"]:::ui
+        JS["static / app.js · auth.js"]:::ui
+        UI --> JS
+    end
+
+    subgraph L2["2 · APLICAÇÃO — Flask"]
+        direction LR
+        WEB["web.py — rotas"]:::core
+        API["api.py — REST /api/*"]:::core
+        AUTH["auth.py — sessão + hash"]:::core
+        DB[("db.py — SQLite")]:::core
+        CFG["config.py"]:::core
+        WEB --> API
+        API --> AUTH
+        API --> DB
+        CFG -.-> API
+    end
+
+    subgraph L3["3 · DETECÇÃO — scanner"]
+        direction LR
+        BASE["base.py — ScanReport"]:::scan
+        SIG["signatures.py"]:::scan
+        PE["pe_parser.py — PE32/64"]:::scan
+        WS["windows_scanner.py — real"]:::scan
+        SS["simulated_scanner.py — demo"]:::scan
+        BASE --> SIG
+        BASE -.->|"Windows"| WS
+        BASE -.->|"WSL/Linux"| SS
+        WS --> PE
+        subgraph EST["estágios de detecção"]
+            direction LR
+            A1["A · Módulos"]:::stage
+            B1["B · Detours"]:::stage
+            C1["C · Artefatos"]:::stage
+        end
+        WS --> EST
+    end
+
+    USR ==> UI
+    UI ==>|"HTTP/JSON"| WEB
+    JS ==>|"Fetch API"| API
+    API ==>|"create_scanner()"| BASE
+    WS ==>|"ReadProcessMemory"| GAME[("Processo do jogo")]:::ext
+    SS ==> DEMO[("Dados sintéticos")]:::ext
+    EST ==>|"ScanReport"| DB
+    style L1 fill:#f8fafc,stroke:#6366f1,color:#3730a3
+    style L2 fill:#f8fafc,stroke:#0891b2,color:#155e75
+    style L3 fill:#f8fafc,stroke:#e11d48,color:#9f1239
+    style EST fill:#fffbeb,stroke:#d97706,color:#78350f

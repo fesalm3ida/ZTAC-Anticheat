@@ -44,17 +44,21 @@
             Iniciar varredura
           </button>
 
+          <button id="cheat-btn"
+                  class="mt-2 w-full rounded-lg border border-slate-700 hover:bg-slate-800 transition text-slate-300 font-medium py-2 text-sm">
+            Simular cheat detectado (demo)
+          </button>
+
           <button id="clean-btn"
                   class="mt-2 w-full rounded-lg border border-slate-700 hover:bg-slate-800 transition text-slate-300 font-medium py-2 text-sm">
             Simular processo limpo (demo)
           </button>
 
-          <label id="no-proc-wrap" for="no-process"
-                 class="hidden mt-3 flex items-center gap-2 text-sm text-slate-400">
-            <input id="no-process" type="checkbox"
-                   class="w-4 h-4 rounded border-slate-700 bg-slate-800">
-            Simular processo não encontrado (demo)
-          </label>
+          <p id="demo-hint" class="hidden mt-3 text-xs leading-relaxed text-slate-500">
+            Modo demo: nenhum processo real é lido. "Iniciar varredura" apenas
+            informa que não há processo em execução; use os cenários acima para
+            visualizar a detecção.
+          </p>
 
           <p id="scan-status" class="mt-4 text-sm text-slate-400 min-h-[1.25rem]"></p>
         </section>

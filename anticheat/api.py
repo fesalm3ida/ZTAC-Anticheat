@@ -88,15 +88,20 @@ def scan():
     pid = data.get("pid") or None
 
     scanner = _scanner()
-    # No modo demo permite simular cenários para testar a UI:
-    #   clean=True      → veredito LIMPO
-    #   no_process=True → aviso "processo do CS não encontrado"
+    # No modo demo não há processo real. Por padrão a varredura é HONESTA e
+    # devolve o aviso "sem processo"; os cenários explícitos permitem
+    # visualizar a detecção:
+    #   scenario="cheat" → veredito HACKEADO (simulado)
+    #   scenario="clean" → veredito LIMPO (simulado)
     if scanner.mode == "demo":
         from .scanner.simulated_scanner import SimulatedScanner
-        scanner = SimulatedScanner(
-            anomalous=not data.get("clean"),
-            no_process=bool(data.get("no_process")),
-        )
+        scenario = (data.get("scenario") or "").lower()
+        if scenario == "cheat":
+            scanner = SimulatedScanner(anomalous=True)
+        elif scenario == "clean" or data.get("clean"):
+            scanner = SimulatedScanner(anomalous=False)
+        else:
+            scanner = SimulatedScanner(no_process=True)
 
     report = scanner.scan(pid)
     report_dict = report.to_dict()

@@ -44,13 +44,11 @@ class SimulatedScanner(ScannerBase):
         return os.name != "nt"
 
     def list_processes(self) -> list[dict]:
-        if self.no_process:
-            return []
-        proc = dict(_FAKE_PROCESS)
-        # PID um pouco "vivo" para parecer a cada chamada
-        proc["pid"] = _FAKE_PROCESS["pid"] + self._rng.randint(-3, 3)
-        proc["simulated"] = True
-        return [proc]
+        # No modo demo NÃO existe processo real do jogo. Retornar uma lista
+        # vazia evita induzir a um falso positivo ("hackeado" sem o jogo).
+        # Para visualizar a detecção, use os cenários explícitos
+        # (scenario="cheat" / "clean").
+        return []
 
     # ------------------------------------------------------------------
     def scan(self, pid: int | None = None) -> "object":

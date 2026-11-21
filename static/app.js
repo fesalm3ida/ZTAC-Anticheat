@@ -231,10 +231,13 @@
 
       // Controles exclusivos do modo demo
       if (isDemo) {
-        $("no-proc-wrap").classList.remove("hidden");
+        $("cheat-btn").classList.remove("hidden");
+        $("clean-btn").classList.remove("hidden");
+        $("demo-hint").classList.remove("hidden");
       } else {
+        $("cheat-btn").classList.add("hidden");
         $("clean-btn").classList.add("hidden");
-        $("no-proc-wrap").classList.add("hidden");
+        $("demo-hint").classList.add("hidden");
       }
 
       // Preenche a lista de processos detectados
@@ -248,14 +251,15 @@
 
     $("scan-btn").addEventListener("click", () => {
       const val = $("process").value;
-      const noProc = $("no-process").checked;
-      runScan({ pid: val ? parseInt(val, 10) : null, no_process: noProc });
+      runScan({ pid: val ? parseInt(val, 10) : null });
+    });
+
+    $("cheat-btn").addEventListener("click", () => {
+      runScan({ scenario: "cheat" });
     });
 
     $("clean-btn").addEventListener("click", () => {
-      // "simular processo limpo" ignora o processo atual; desmarca o toggle
-      $("no-process").checked = false;
-      runScan({ pid: null, clean: true });
+      runScan({ scenario: "clean" });
     });
 
     $("clear-process").addEventListener("click", () => {
@@ -264,7 +268,6 @@
       const sel = $("process");
       sel.innerHTML = '<option value="">Auto-detectar (nenhum)</option>';
       sel.value = "";
-      $("no-process").checked = false;
       resetDisplay();
       $("scan-status").textContent =
         "Processo limpo — nenhum processo na seleção; o histórico foi mantido.";
