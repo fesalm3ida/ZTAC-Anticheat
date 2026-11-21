@@ -86,7 +86,7 @@ Abra **http://127.0.0.1:5050**, crie uma conta, clique em **Iniciar varredura**.
 Útil para desenvolver/testar a GUI e o pipeline de detecção:
 
 ```bash
-cd /home/fealmeida/deepseek-ai/workspace/anticheat
+cd /home/fealmeida/.../.../anticheat
 python3 -m pip install -r requirements.txt
 python3 app.py
 ```
